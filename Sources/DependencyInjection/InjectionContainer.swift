@@ -7,9 +7,6 @@
 //
 
 import Foundation
-#if canImport(ObjectiveC)
-import ObjectiveC.objc_runtime
-#endif
 
 /**
  Modes to use for each registered service
