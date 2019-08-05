@@ -11,12 +11,20 @@ import Foundation
 /**
  Dependency Injection base module. Subclass this to create modules for injection
  */
-open class DependencyInjection {
+open class DependencyInjectionModule: NSObject {
     
     public let container: InjectionContainer
     
-    public required init(container: InjectionContainer) {
+    open class func isContainerAllowed(_ container: InjectionContainer) -> Bool {
+        return true
+    }
+    
+    public required init?(container: InjectionContainer = .default) {
+        guard Self.isContainerAllowed(container) else {
+            return nil
+        }
         self.container = container
+        super.init()
     }
     
     open func setUp() { }

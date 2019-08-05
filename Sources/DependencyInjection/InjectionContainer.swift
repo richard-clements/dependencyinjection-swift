@@ -7,6 +7,9 @@
 //
 
 import Foundation
+#if canImport(ObjectiveC)
+import ObjectiveC.objc_runtime
+#endif
 
 /**
  Modes to use for each registered service
@@ -59,9 +62,9 @@ public class InjectionContainer {
         
     }
     
-    public init() {
-        
-    }
+    public static let `default` = InjectionContainer()
+    
+    public init() { }
     
     private var registrations = [String: Injection]()
     private var savedValues = [String: Any]()

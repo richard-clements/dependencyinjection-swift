@@ -9,32 +9,10 @@
 import XCTest
 @testable import DependencyInjection
 
-class MockInjectable: NSObject, DependencyInjectable {
+class MockInjectable {
     
-    static var injectionContainer: DependencyInjectionContainer<MockInjectable>?
-    
-    var someString: String?
-    
-    override init() {
-        super.init()
-        do {
-            try type(of: self).injectionContainer?.inject(self)
-        } catch {
-            print(error)
-        }
-    }
-    
-}
-
-class MockInjectableItem: InjectableObject {
-    
-    var something: String?
-    
-}
-
-class MockViewController: UIViewController {
-    
-    var something: String?
+    @Inject var someString: String!
+    @Inject(name: "Named Int") var someInt: Int!
     
 }
 
@@ -43,86 +21,32 @@ class InjectableTests: XCTestCase {
     var container: InjectionContainer!
     
     override func setUp() {
-        container = InjectionContainer()
-        MockInjectable.injectionContainer = DependencyInjectionContainer<MockInjectable>(container: container)
-        InjectableObject.injectionContainer = DependencyInjectionContainer<InjectableObject>(container: container)
-        UIViewController.injectionContainer = DependencyInjectionContainer<UIViewController>(container: container)
-        
+        container = .default
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
     
     override func tearDown() {
         container = nil
-        MockInjectable.injectionContainer = nil
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
     
     func test_newInstance_resolvesFromContainer() {
         container.register(String.self, mode: .alwaysNew) {
             resolver in
-            return "Test"
+            return "42"
         }
         
-        MockInjectable.registerInjectable {
-            object, resolver in
-            object.someString = resolver.resolve(String.self)
+        container.register(Int.self, name: "Named Int", mode: .alwaysNew) {
+            resolver in
+            return 42
         }
         
         let object = MockInjectable()
-        XCTAssertEqual(object.someString, "Test")
-    }
-    
-    func test_inject_injectableObject() {
-        container.register(String.self, mode: .alwaysNew) {
-            resolver in
-            return "Test"
-        }
-        
-        MockInjectableItem.registerInjectable {
-            object, resolver in
-            object.something = resolver.resolve(String.self)
-        }
-        
-        let object = MockInjectableItem()
-        XCTAssertEqual(object.something, "Test")
-    }
-    
-    func test_inject_viewController_viewDidLoad() {
-        container.register(String.self, mode: .alwaysNew) {
-            resolver in
-            return "Test"
-        }
-        
-        MockViewController.registerInjectable {
-            object, resolver in
-            object.something = resolver.resolve(String.self)
-        }
-        
-        let vc = MockViewController()
-        vc.viewDidLoad()
-        XCTAssertEqual(vc.something, "Test")
-    }
-    
-    func test_inject_viewController_awakeFromNib() {
-        container.register(String.self, mode: .alwaysNew) {
-            resolver in
-            return "Test"
-        }
-        
-        MockViewController.registerInjectable {
-            object, resolver in
-            object.something = resolver.resolve(String.self)
-        }
-        
-        let vc = MockViewController()
-        vc.awakeFromNib()
-        XCTAssertEqual(vc.something, "Test")
+        XCTAssertEqual(object.someString, "42")
+        XCTAssertEqual(object.someInt, 42)
     }
     
     static var allTests = [
         ("test_newInstance_resolvesFromContainer", test_newInstance_resolvesFromContainer),
-        ("test_inject_injectableObject", test_inject_injectableObject),
-        ("test_inject_viewController_viewDidLoad", test_inject_viewController_viewDidLoad),
-        ("test_inject_viewController_awakeFromNib", test_inject_viewController_awakeFromNib),
     ]
 }
