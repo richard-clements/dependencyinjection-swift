@@ -7,9 +7,9 @@
 
 import Foundation
 
-class DependencyInjectionManager {
+public class DependencyInjectionManager {
     
-    init(container: InjectionContainer = .default) {
+    public init(container: InjectionContainer = .default) {
         let expectedClassCount = objc_getClassList(nil, 0)
         let allClasses = UnsafeMutablePointer<AnyClass?>.allocate(capacity: Int(expectedClassCount))
         
