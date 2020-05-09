@@ -119,4 +119,17 @@ public class InjectionContainer {
         
         return value
     }
+    
+    /**
+    Method for resolving instances of services from the container.
+    
+    - parameters:
+        - name: The name of the registration to resolve. Can be nil
+    
+    - returns:
+        The instance of the service to be used. Force unwraps the service. If no registrations have been made it will crash.
+    */
+    public func resolve<T: Any>(name: Key? = nil) -> T! {
+        return resolve(T.self, name: name)
+    }
 }
