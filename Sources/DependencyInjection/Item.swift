@@ -8,7 +8,7 @@
 import Foundation
 
 
-protocol Item {
+public protocol Item {
     
     var scope: Scope { get }
     func resolve<T>(with graph: Graph, arguments: [CVarArg]) -> T?
@@ -16,7 +16,7 @@ protocol Item {
     
 }
 
-struct Dependency: Item {
+public struct Dependency: Item {
 
     let module: AnyModule
     
@@ -24,55 +24,55 @@ struct Dependency: Item {
         self.module = module
     }
 
-    init<T>(for type: T.Type, resolver: @escaping (Graph, [CVarArg]) -> T) {
+    public init<T>(for type: T.Type, resolver: @escaping (Graph, [CVarArg]) -> T) {
         module = GraphModule(resolver: { (graph: Graph, arguments: [CVarArg]) in
             resolver(graph, arguments)
         }).eraseToAnyDependencyModule()
     }
 
-    init<T>(for type: T.Type, resolver: @escaping (Graph) -> T) {
+    public init<T>(for type: T.Type, resolver: @escaping (Graph) -> T) {
         module = GraphModule(resolver: { (graph: Graph, arguments: [CVarArg]) in
             resolver(graph)
         }).eraseToAnyDependencyModule()
     }
 
-    init<T>(for type: T.Type, resolver: @escaping () -> T) {
+    public init<T>(for type: T.Type, resolver: @escaping () -> T) {
         module = IndependentGraphModule(resolver: resolver).eraseToAnyDependencyModule()
     }
 
-    init<T>(for type: T.Type, resolver: @autoclosure @escaping () -> T) {
+    public init<T>(for type: T.Type, resolver: @autoclosure @escaping () -> T) {
         module = IndependentGraphModule(resolver: resolver).eraseToAnyDependencyModule()
     }
 
-    init<T>(_ resolver: @escaping (Graph, [CVarArg]) -> T) {
+    public init<T>(_ resolver: @escaping (Graph, [CVarArg]) -> T) {
         module = GraphModule(resolver: { (graph: Graph, arguments: [CVarArg]) in
             resolver(graph, arguments)
         }).eraseToAnyDependencyModule()
     }
 
-    init<T>(_ resolver: @escaping (Graph) -> T) {
+    public init<T>(_ resolver: @escaping (Graph) -> T) {
         module = GraphModule(resolver: { (graph: Graph, arguments: [CVarArg]) in
             resolver(graph)
         }).eraseToAnyDependencyModule()
     }
 
-    init<T>(_ resolver: @escaping () -> T) {
+    public init<T>(_ resolver: @escaping () -> T) {
         module = IndependentGraphModule(resolver: resolver).eraseToAnyDependencyModule()
     }
 
-    init<T>(_ resolver: @autoclosure @escaping () -> T) {
+    public init<T>(_ resolver: @autoclosure @escaping () -> T) {
         module = IndependentGraphModule(resolver: resolver).eraseToAnyDependencyModule()
     }
     
-    var scope: Scope {
+    public var scope: Scope {
         return module.scope
     }
     
-    func resolves<T>(type: T.Type, with scope: Scope) -> Bool {
+    public func resolves<T>(type: T.Type, with scope: Scope) -> Bool {
         return module.resolves(type: type, with: scope)
     }
 
-    func resolve<T>(with graph: Graph, arguments: [CVarArg]) -> T? {
+    public func resolve<T>(with graph: Graph, arguments: [CVarArg]) -> T? {
         return module.perform(with: graph, arguments: arguments)
     }
     

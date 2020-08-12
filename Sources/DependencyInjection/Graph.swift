@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Graph {
+public struct Graph {
     
     let dependencies: [Item]
     private let identifier = UUID()
@@ -30,10 +30,6 @@ struct Graph {
         return value
     }
     
-    func resolve<T>() -> T? {
-        resolve(scope: .new, with: [])
-    }
-    
     func argumentsResolver<T>(with arguments: [CVarArg]) -> T? {
         resolve(scope: .new, with: arguments)
     }
@@ -41,16 +37,20 @@ struct Graph {
     func argumentsResolver<T>(scope: Scope.Name, with arguments: [CVarArg] = []) -> T? {
         Self.resolve(scope: .named(scope), for: identifier, arguments: arguments) ?? resolve(scope: .named(scope), with: arguments)
     }
-
-    func resolve<T>(arguments: CVarArg...) -> T? {
+    
+    public func resolve<T>() -> T? {
+        resolve(scope: .new, with: [])
+    }
+    
+    public func resolve<T>(arguments: CVarArg...) -> T? {
         resolve(scope: .new, with: arguments)
     }
     
-    func resolve<T>(scope: Scope.Name, arguments: CVarArg...) -> T? {
+    public func resolve<T>(scope: Scope.Name, arguments: CVarArg...) -> T? {
         Self.resolve(scope: .named(scope), for: identifier, arguments: arguments) ?? resolve(scope: .named(scope), with: arguments)
     }
     
-    func resolve<T>(named name: Scope.Name) -> T? {
+    public func resolve<T>(named name: Scope.Name) -> T? {
         Self.resolve(scope: .named(name), for: identifier, arguments: []) ?? resolve(scope: .named(name), with: [])
     }
     
@@ -118,8 +118,8 @@ extension Graph {
     
     static var `default`: Graph = Graph(dependencies: [])
     
-    static func initialise(builder: () -> Graph) {
-        self.default = builder()
+    static func initialise(builder: () -> PartialGraph) {
+        self.default = .init(builder: builder)
     }
     
 }

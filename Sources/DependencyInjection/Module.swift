@@ -11,7 +11,6 @@ protocol Module {
 
     associatedtype ResultType
 
-    var scope: Scope { get }
     func module(with graph: Graph, arguments: [CVarArg]) -> ResultType
 
 }
@@ -33,7 +32,7 @@ struct AnyModule {
             return module.module(with: graph, arguments: arguments)
         }
         self.handler = handler
-        self.scope = module.scope
+        self.scope = .new
     }
     
     func resolves<ResultType>(type: ResultType.Type, with scope: Scope?) -> Bool {
@@ -61,10 +60,8 @@ struct AnyModule {
 struct GraphModule<T>: Module {
 
     let resolver: (Graph, [CVarArg]) -> T
-    let scope: Scope
     
-    init(scope: Scope = .new, resolver: @escaping (Graph, [CVarArg]) -> T) {
-        self.scope = scope
+    init(resolver: @escaping (Graph, [CVarArg]) -> T) {
         self.resolver = resolver
     }
 
@@ -77,10 +74,8 @@ struct GraphModule<T>: Module {
 struct IndependentGraphModule<T>: Module {
 
     let resolver: () -> T
-    let scope: Scope
     
-    init(scope: Scope = .new, resolver: @escaping () -> T) {
-        self.scope = scope
+    init(resolver: @escaping () -> T) {
         self.resolver = resolver
     }
 
