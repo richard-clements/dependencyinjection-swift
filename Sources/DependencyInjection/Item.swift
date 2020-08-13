@@ -76,7 +76,7 @@ public struct Dependency: Item {
         return module.perform(with: graph, arguments: arguments)
     }
     
-    func withScope(_ scope: Scope) -> Dependency {
+    public func withScope(_ scope: Scope) -> Dependency {
         Dependency(module: module.withScope(scope))
     }
 
@@ -84,7 +84,7 @@ public struct Dependency: Item {
 
 extension Dependency: PartialGraph {
     
-    var dependencies: [Item] {
+    public var dependencies: [Item] {
         [self]
     }
     

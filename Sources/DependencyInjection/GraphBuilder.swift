@@ -8,7 +8,7 @@
 import Foundation
 
 @_functionBuilder
-struct GraphBuilder {
+public struct GraphBuilder {
     
     public static func buildBlock(_ components: PartialGraph...) -> PartialGraph {
         Graph(dependencies: components.flatMap { $0.dependencies })

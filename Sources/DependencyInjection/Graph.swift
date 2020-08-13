@@ -9,7 +9,7 @@ import Foundation
 
 public struct Graph {
     
-    let dependencies: [Item]
+    public let dependencies: [Item]
     private let identifier = UUID()
     
     init(dependencies: [Item]) {
@@ -100,7 +100,7 @@ extension Graph {
     }
 }
 
-protocol PartialGraph {
+public protocol PartialGraph {
     var dependencies: [Item] { get }
 }
 
@@ -108,7 +108,7 @@ extension Graph: PartialGraph { }
 
 extension Graph {
     
-    init(@GraphBuilder builder: () -> PartialGraph) {
+    public init(@GraphBuilder builder: () -> PartialGraph) {
         self.init(dependencies: builder().dependencies)
     }
     
@@ -116,9 +116,9 @@ extension Graph {
 
 extension Graph {
     
-    static var `default`: Graph = Graph(dependencies: [])
+    public static var `default`: Graph = Graph(dependencies: [])
     
-    static func initialise(builder: () -> PartialGraph) {
+    public static func initialise(builder: () -> PartialGraph) {
         self.default = .init(builder: builder)
     }
     

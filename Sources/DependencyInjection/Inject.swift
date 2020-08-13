@@ -8,9 +8,9 @@
 import Foundation
 
 @propertyWrapper
-struct Inject<T> {
-    var wrappedValue: T
-    init(name: Scope.Name? = nil, graph: Graph = .default, arguments: CVarArg...) {
+public struct Inject<T> {
+    public var wrappedValue: T
+    public init(name: Scope.Name? = nil, graph: Graph = .default, arguments: CVarArg...) {
         if let name = name {
             wrappedValue = graph.argumentsResolver(scope: name, with: arguments)!
         } else {
@@ -18,7 +18,7 @@ struct Inject<T> {
         }
     }
     
-    init(name: Scope.Name? = nil, graph: Graph = .default) {
+    public init(name: Scope.Name? = nil, graph: Graph = .default) {
         if let name = name {
             wrappedValue = graph.resolve(scope: name)!
         } else {
