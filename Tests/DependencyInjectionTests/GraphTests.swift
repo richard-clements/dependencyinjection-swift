@@ -8,7 +8,7 @@
 import XCTest
 @testable import DependencyInjection
 
-class GraphTests: XCTestCase {
+public class GraphTests: XCTestCase {
     
     func testResolve() {
         let graph = Graph(dependencies: [
@@ -99,4 +99,19 @@ class GraphTests: XCTestCase {
         }
         XCTAssertEqual(Graph.default.resolve(), 5)
     }
+}
+
+extension GraphTests {
+    
+    public static var allTests = [
+        ("testResolve", testResolve),
+        ("testResolveArguments", testResolveArguments),
+        ("testResolveName", testResolveName),
+        ("testResolveNameAndArguments", testResolveNameAndArguments),
+        ("testResolveSingleInstance", testResolveSingleInstance),
+        ("testResolveNew", testResolveNew),
+        ("testResolveScope", testResolveScope),
+        ("testGraphBuilder", testGraphBuilder),
+        ("testGraphInitialise", testGraphInitialise)
+    ]
 }

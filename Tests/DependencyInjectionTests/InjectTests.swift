@@ -8,7 +8,7 @@
 import XCTest
 @testable import DependencyInjection
 
-class InjectTests: XCTestCase {
+public class InjectTests: XCTestCase {
     
     func testInject() {
         struct Mock {
@@ -63,5 +63,16 @@ class InjectTests: XCTestCase {
         let mock = Mock()
         XCTAssertEqual(mock.integer, 5)
     }
+    
+}
+
+extension InjectTests {
+    
+    public static var allTests = [
+        ("testInject", testInject),
+        ("testInjectNamedScope", testInjectNamedScope),
+        ("testInjectArguments", testInjectArguments),
+        ("testInjectGraph", testInjectGraph)
+    ]
     
 }

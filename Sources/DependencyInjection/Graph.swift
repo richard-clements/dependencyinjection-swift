@@ -116,7 +116,7 @@ extension Graph {
 
 extension Graph {
     
-    public static var `default`: Graph = Graph(dependencies: [])
+    public internal(set) static var `default`: Graph = Graph(dependencies: [])
     
     public static func initialise(builder: () -> PartialGraph) {
         self.default = .init(builder: builder)
