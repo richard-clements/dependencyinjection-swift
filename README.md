@@ -1,6 +1,8 @@
 # Dependency Injection
 
-### Initialising a Graph
+![Swift](https://github.com/richard-clements/dependencyinjection-swift/workflows/Swift/badge.svg)
+
+## Initialising a Graph
 
 Graphs are built using closure syntax.
 
@@ -25,7 +27,7 @@ Dependency(for: SomeProtocol.self, resolver: SomeConcrete())
 Dependency(SomeConcrete())
 ```
 
-### Scopes
+## Scopes
 There are multiple scopes available.
 
 | Scope | Result |
@@ -42,7 +44,7 @@ Dependency(SomeConcrete2()).withScope(.named("A Name"))
 Dependency(SomeConcrete3()).withScope(.singleInstance)
 ```
 
-### Injecting
+## Injecting
 
 To inject a value outside of graph dependencies, use `@Inject`.
 
@@ -54,7 +56,7 @@ class SomeClass {
 
 All paramaters of `@Inject` are optional. If the graph parameter is not passed, the default single value instance will be used.
 
-### Initialising Default Graph
+## Initialising Default Graph
 
 To initialise the default single value instance graph use `Graph.initialise`. The initialise method uses the same closure style as the `Graph.init` method.
 
