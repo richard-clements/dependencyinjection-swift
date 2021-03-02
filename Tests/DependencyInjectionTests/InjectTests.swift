@@ -103,14 +103,18 @@ public class InjectTests: XCTestCase {
         struct Mock {
             @LazyInject(arguments: 1) var integer: Int
         }
+        var calledDependency = false
         let graph = Graph {
-            Dependency { _, arguments in
-                arguments[0] as! Int
+            Dependency { _, arguments -> Int in
+                calledDependency = true
+                return arguments[0] as! Int
             }
         }
         Graph.default = graph
         let mock = Mock()
+        XCTAssertFalse(calledDependency)
         XCTAssertEqual(mock.integer, 1)
+        XCTAssertTrue(calledDependency)
     }
     
     func testLazyInjectGraph() {
