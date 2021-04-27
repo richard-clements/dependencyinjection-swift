@@ -7,7 +7,7 @@
 
 import Foundation
 
-@_functionBuilder
+@resultBuilder
 public struct GraphBuilder {
     
     public static func buildBlock(_ components: PartialGraph...) -> PartialGraph {
