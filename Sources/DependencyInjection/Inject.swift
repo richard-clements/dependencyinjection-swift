@@ -8,22 +8,26 @@
 import Foundation
 
 @propertyWrapper
-public struct Inject<T> {
-    public var wrappedValue: T
+public class Inject<T> {
+    var _wrappedValue: T
     public init(name: Scope.Name? = nil, graph: Graph = .default, arguments: CVarArg...) {
         if let name = name {
-            wrappedValue = graph.argumentsResolver(scope: name, with: arguments)!
+            _wrappedValue = graph.argumentsResolver(scope: name, with: arguments)!
         } else {
-            wrappedValue = graph.argumentsResolver(with: arguments)!
+            _wrappedValue = graph.argumentsResolver(with: arguments)!
         }
     }
     
     public init(name: Scope.Name? = nil, graph: Graph = .default) {
         if let name = name {
-            wrappedValue = graph.resolve(scope: name)!
+            _wrappedValue = graph.resolve(scope: name)!
         } else {
-            wrappedValue = graph.resolve()!
+            _wrappedValue = graph.resolve()!
         }
+    }
+    
+    public var wrappedValue: T {
+        _wrappedValue
     }
 }
 
@@ -64,5 +68,29 @@ public class LazyInject<T> {
             _wrappedValue = resolveValue()
         }
         return _wrappedValue!
+    }
+}
+
+@propertyWrapper
+public class MutableInject<T>: Inject<T> {
+    public override var wrappedValue: T {
+        get {
+            super.wrappedValue
+        }
+        set {
+            _wrappedValue = newValue
+        }
+    }
+}
+
+@propertyWrapper
+public class MutableLazyInject<T>: LazyInject<T> {
+    public override var wrappedValue: T {
+        get {
+            super.wrappedValue
+        }
+        set {
+            _wrappedValue = newValue
+        }
     }
 }
