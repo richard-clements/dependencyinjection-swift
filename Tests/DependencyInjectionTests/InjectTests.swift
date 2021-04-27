@@ -247,7 +247,7 @@ public class InjectTests: XCTestCase {
         XCTAssertTrue(calledDependency)
     }
     
-    func testMutbaleLazyInjectGraph() {
+    func testMutableLazyInjectGraph() {
         struct Mock {
             static let graph = Graph {
                 Dependency { 5 }
@@ -258,7 +258,7 @@ public class InjectTests: XCTestCase {
         XCTAssertEqual(mock.integer, 5)
     }
     
-    func testMutbaleLazyIsMutable() {
+    func testMutableLazyInjectIsMutable() {
         struct Mock {
             static let graph = Graph {
                 Dependency { 5 }
@@ -278,10 +278,20 @@ extension InjectTests {
         ("testInjectNamedScope", testInjectNamedScope),
         ("testInjectArguments", testInjectArguments),
         ("testInjectGraph", testInjectGraph),
+        ("testMutableInject", testMutableInject),
+        ("testMutableInjectNamedScope", testMutableInjectNamedScope),
+        ("testMutableInjectArguments", testMutableInjectArguments),
+        ("testMutableInjectGraph", testMutableInjectGraph),
+        ("testMutableInjectIsMutable", testMutableInjectIsMutable),
         ("testLazyInject", testLazyInject),
         ("testLazyInjectNamedScope", testLazyInjectNamedScope),
         ("testLazyInjectArguments", testLazyInjectArguments),
-        ("testLazyInjectGraph", testLazyInjectGraph)
+        ("testLazyInjectGraph", testLazyInjectGraph),
+        ("testMutableLazyInject", testMutableLazyInject),
+        ("testMutableLazyInjectNamedScope", testMutableLazyInjectNamedScope),
+        ("testMutableLazyInjectArguments", testMutableLazyInjectArguments),
+        ("testMutableLazyInjectGraph", testMutableLazyInjectGraph),
+        ("testMutableLazyInjectIsMutable", testMutableLazyInjectIsMutable)
     ]
     
 }
