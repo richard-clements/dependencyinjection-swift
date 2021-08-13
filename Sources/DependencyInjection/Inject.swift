@@ -70,7 +70,7 @@ public class LazyInject<T> {
         self
     }
     
-    subscript<Value>(dynamicMember keyPath: WritableKeyPath<T, Optional<Value>>) -> Value? {
+    public subscript<Value>(dynamicMember keyPath: WritableKeyPath<T, Optional<Value>>) -> Value? {
         get { nil }
         set {
             let function = initialisationFunction
@@ -81,7 +81,7 @@ public class LazyInject<T> {
         }
     }
     
-    subscript<Value>(dynamicMember keyPath: WritableKeyPath<T, Value>) -> Value! {
+    public subscript<Value>(dynamicMember keyPath: WritableKeyPath<T, Value>) -> Value! {
         get { nil }
         set {
             let function = initialisationFunction
