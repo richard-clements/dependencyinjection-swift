@@ -27,6 +27,7 @@ public class Inject<T> {
 @propertyWrapper
 public class LazyInject<T> {
     var _wrappedValue: T?
+    var initialisationFunction: ((T) -> Void)? = nil
     
     private var name: Scope.Name?
     private var graphResolver: () -> Graph
@@ -59,8 +60,17 @@ public class LazyInject<T> {
     public var wrappedValue: T {
         if _wrappedValue == nil {
             _wrappedValue = resolveValue()
+            initialisationFunction?(_wrappedValue!)
         }
         return _wrappedValue!
+    }
+    
+    public var projectedValue: LazyInject<T> {
+        self
+    }
+    
+    public func onInit(updateHandler: @escaping (T) -> Void) {
+        self.initialisationFunction = updateHandler
     }
 }
 
@@ -85,5 +95,9 @@ public class MutableLazyInject<T>: LazyInject<T> {
         set {
             _wrappedValue = newValue
         }
+    }
+    
+    public override var projectedValue: LazyInject<T> {
+        self
     }
 }

@@ -194,6 +194,25 @@ public class InjectTests: XCTestCase {
         XCTAssertEqual(mock.integer, 5)
     }
     
+    func testLazyInjectGraph_OnInit() {
+        struct Mock {
+            static let graph = Graph {
+                Dependency { Subclass() }
+            }
+            
+            class Subclass {
+                var integer: Int?
+            }
+            
+            @LazyInject(graph: Self.graph) var subclass: Subclass
+        }
+        let mock = Mock()
+        mock.$subclass.onInit {
+            $0.integer = 5
+        }
+        XCTAssertEqual(mock.subclass.integer, 5)
+    }
+    
     func testMutableLazyInject() {
         struct Mock {
             @MutableLazyInject var integer: Int
@@ -268,6 +287,25 @@ public class InjectTests: XCTestCase {
         let mock = Mock()
         mock.integer = 7
         XCTAssertEqual(mock.integer, 7)
+    }
+
+    func testMutableLazyInjectGraph_OnInit() {
+        struct Mock {
+            static let graph = Graph {
+                Dependency { Subclass() }
+            }
+            
+            class Subclass {
+                var integer: Int?
+            }
+            
+            @MutableLazyInject(graph: Self.graph) var subclass: Subclass
+        }
+        let mock = Mock()
+        mock.$subclass.onInit {
+            $0.integer = 5
+        }
+        XCTAssertEqual(mock.subclass.integer, 5)
     }
 }
 
