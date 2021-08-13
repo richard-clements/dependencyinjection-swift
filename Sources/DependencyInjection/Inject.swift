@@ -25,9 +25,10 @@ public class Inject<T> {
 }
 
 @propertyWrapper
+@dynamicMemberLookup
 public class LazyInject<T> {
     var _wrappedValue: T?
-    var initialisationFunction: ((T) -> Void)? = nil
+    var initialisationFunction: ((inout T) -> Void)? = nil
     
     private var name: Scope.Name?
     private var graphResolver: () -> Graph
@@ -60,7 +61,7 @@ public class LazyInject<T> {
     public var wrappedValue: T {
         if _wrappedValue == nil {
             _wrappedValue = resolveValue()
-            initialisationFunction?(_wrappedValue!)
+            initialisationFunction?(&_wrappedValue!)
         }
         return _wrappedValue!
     }
@@ -69,8 +70,28 @@ public class LazyInject<T> {
         self
     }
     
-    public func onInit(updateHandler: @escaping (T) -> Void) {
-        self.initialisationFunction = updateHandler
+    subscript<Value>(dynamicMember keyPath: WritableKeyPath<T, Optional<Value>>) -> Value? {
+        get { nil }
+        set {
+            let function = initialisationFunction
+            initialisationFunction = {
+                function?(&$0)
+                $0[keyPath: keyPath] = newValue
+            }
+        }
+    }
+    
+    subscript<Value>(dynamicMember keyPath: WritableKeyPath<T, Value>) -> Value! {
+        get { nil }
+        set {
+            let function = initialisationFunction
+            initialisationFunction = {
+                function?(&$0)
+                if let value = newValue {
+                    $0[keyPath: keyPath] = value
+                }
+            }
+        }
     }
 }
 

@@ -202,15 +202,19 @@ public class InjectTests: XCTestCase {
             
             class Subclass {
                 var integer: Int?
+                var string: String?
+                var nonOptional: Int = 0
             }
             
             @LazyInject(graph: Self.graph) var subclass: Subclass
         }
         let mock = Mock()
-        mock.$subclass.onInit {
-            $0.integer = 5
-        }
+        mock.$subclass.integer = 5
+        mock.$subclass.string = "My string"
+        mock.$subclass.nonOptional = 1
         XCTAssertEqual(mock.subclass.integer, 5)
+        XCTAssertEqual(mock.subclass.string, "My string")
+        XCTAssertEqual(mock.subclass.nonOptional, 1)
     }
     
     func testMutableLazyInject() {
@@ -297,15 +301,19 @@ public class InjectTests: XCTestCase {
             
             class Subclass {
                 var integer: Int?
+                var string: String?
+                var nonOptional: Int = 0
             }
             
             @MutableLazyInject(graph: Self.graph) var subclass: Subclass
         }
         let mock = Mock()
-        mock.$subclass.onInit {
-            $0.integer = 5
-        }
+        mock.$subclass.integer = 5
+        mock.$subclass.string = "My String"
+        mock.$subclass.nonOptional = 2
         XCTAssertEqual(mock.subclass.integer, 5)
+        XCTAssertEqual(mock.subclass.string, "My String")
+        XCTAssertEqual(mock.subclass.nonOptional, 2)
     }
 }
 
